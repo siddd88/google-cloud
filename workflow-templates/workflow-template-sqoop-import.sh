@@ -1,9 +1,12 @@
 #!/bin/bash
 
-bucket="gs://your-bucket-url"
-template_name="mysql-test-import" #Any name for the template
-cluster_name = "sqoop-import" # Any name for your cluster
-instance_name = "your_cloudsql_instance_name" 
+bucket="gs://staging.streaming-practice-228618.appspot.com"
+template_name="mysql-test-import"
+cluster_name="sqoop-import"
+instance_name="streaming-practice-228618:us-central1:test-instance"
+table_name="customers"
+
+gsutil rm -r $bucket/$table_name && 
 
 gcloud dataproc workflow-templates delete -q $template_name  &&
 
@@ -32,9 +35,9 @@ file:///usr/share/java/mysql-connector-java-5.1.42.jar \
 -- import -Dmapreduce.job.user.classpath.first=true \
 --driver com.mysql.jdbc.Driver \
 --connect="jdbc:mysql://localhost:3307" \
---username=[your_username] --password=[your_pwd] \
+--username=[your_clousql_username] --password=[your_clousql_user_pwd] \
 --query "select * from classicmodels.customers where customerNumber>0 and \$CONDITIONS" \
---target-dir $bucket/customers \
+--target-dir $bucket/$table_name \
 --split-by customerNumber -m 2 && 
 
 gcloud beta dataproc workflow-templates instantiate $template_name
