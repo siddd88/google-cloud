@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# gsutil rm -r gs://staging.streaming-practice-228618.appspot.com/transactions/ && 
-
 bucket="gs://your-bucket-url"
 template_name="mysql-test-import" #Any name for the template
 cluster_name = "sqoop-import" # Any name for your cluster
